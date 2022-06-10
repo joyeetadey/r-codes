@@ -1,0 +1,29 @@
+rm(list=ls())
+Mgd<-function(x1,x2,y,m1,m2,c,alpha,gamma,iter){
+  iterations=0
+  Lf<-0
+  u_m1<-0
+  u_m2<-0
+  u_c<-0
+  while(iterations<=iter){
+    y_pred<-m1*x1+m2*x2+c
+    Lf_new<-0.5*sum((y_pred-y)^2)
+    nu_m1<-gamma*u_m1+alpha*sum((y_pred-y)*x1)
+    nu_m2<-gamma*u_m2+alpha*sum((y_pred-y)*x2)
+    nu_c<-gamma*u_c+alpha*sum(y_pred-y)
+    m1<-m1-nu_m1
+    m2<-m2-nu_m2
+    c<-c-nu_c
+    u_m1<-nu_m1
+    u_m2<-nu_m2
+    u_c<-nu_c
+    Lf<-Lf_new
+    iterations=iterations+1
+  }
+  return(paste("optimal intercept:",c,"optimatl slope:",m1,m2,"Loss funciton:",Lf,"iterations:",iterations))
+}
+data1<-mtcars
+plot(data1$mpg,data1$wt,col="red",pch=20)
+Mgd(data1$wt,data1$hp,data1$mpg,-0.2,-0.2,32,0.000002,0,1000000)
+lr<-lm(data1$mpg~data1$hp+data1$wt)
+lr

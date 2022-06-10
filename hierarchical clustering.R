@@ -1,0 +1,11 @@
+rm(list=ls())
+setwd("C:/Users/Joyeeta/Desktop/sem6/da_lab")
+data <- read.csv("iris.csv",row.names=1)
+head(data,3)
+df <- scale(data)
+dissim <- dist(df, method = 'euclidean')
+hierClust <- hclust(dissim, method = 'complete')
+plot(hierClust)
+cluster <- cutree(hierClust, k = 3)
+cluster
+rect.hclust(hierClust, k = 3, border = 2:3)
